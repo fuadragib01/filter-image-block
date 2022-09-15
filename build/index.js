@@ -184,12 +184,17 @@ function Edit(props) {
     newImage,
     filter
   } = attributes; // 
+  // useEffect(() => {
+  // 	setAttributes({
+  // 		blockId: clientId,
+  // 	});
+  // }, []);
 
+  const [tag, setTag] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('All');
+  const [filteredImages, setFilteredImages] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(images);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    setAttributes({
-      blockId: clientId
-    });
-  }, []);
+    tag === 'All' ? setFilteredImages(images) : setFilteredImages(images.filter(image => image.catText === tag));
+  }, [tag, images]);
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
     className: classnames__WEBPACK_IMPORTED_MODULE_5___default()(className, `custom-class`)
   });
@@ -201,8 +206,6 @@ function Edit(props) {
       item.url = image.url;
       sources.push(item);
     });
-    console.log('Images---', images);
-    console.log('Sources---', sources);
     setAttributes({
       images,
       sources
@@ -210,15 +213,13 @@ function Edit(props) {
   }
 
   let urls = [];
-  images.map(image => urls.push(image.url));
-  let cats = [];
+  filteredImages.map(image => urls.push(image.url));
+  let cats = ['All'];
   images.map(item => cats.push(item.catText));
-  cats = cats.filter((e, i, a) => a.indexOf(e) === i); // images.map((item) => console.log(item));
-
-  console.log('cats---', cats);
-  console.log('images---', images);
-  console.log(filter);
-  console.log(cats.length);
+  cats = cats.filter((e, i, a) => a.indexOf(e) === i);
+  console.log(filteredImages, tag);
+  console.log(urls, tag);
+  console.log(filteredImages, tag);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, isSelected && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_inspector__WEBPACK_IMPORTED_MODULE_6__["default"], {
     attributes: attributes,
     setAttributes: setAttributes
@@ -236,9 +237,12 @@ function Edit(props) {
     "data-id": blockId
   }, urls.length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, cats.length > 0 && filter && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `categories`
-  }, cats.map(cat => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null, cat))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, cats.map(cat => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(TagButton, {
+    name: cat,
+    handleSetTag: setTag
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `img-block-wrapper`
-  }, sources.map((source, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+  }, filteredImages.map((source, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     key: index,
     className: `gallery-img`
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
@@ -256,8 +260,6 @@ function Edit(props) {
         item.url = image.url;
         sources.push(item);
       });
-      console.log('Images select---', updatedImages);
-      console.log('Sources select---', sources);
       setAttributes({
         images: updatedImages,
         sources
@@ -280,6 +282,17 @@ function Edit(props) {
     }
   })))));
 }
+
+const TagButton = _ref2 => {
+  let {
+    name,
+    handleSetTag
+  } = _ref2;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: `tag`,
+    onClick: () => handleSetTag(name)
+  }, name);
+};
 
 /***/ }),
 

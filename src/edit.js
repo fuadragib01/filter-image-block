@@ -35,11 +35,18 @@ export default function Edit(props) {
 	} = attributes;
 
 	// 
-	useEffect(() => {
-		setAttributes({
-			blockId: clientId,
-		});
-	}, []);
+	// useEffect(() => {
+	// 	setAttributes({
+	// 		blockId: clientId,
+	// 	});
+	// }, []);
+
+	const [tag, setTag] = useState('All');
+	const [filteredImages, setFilteredImages] = useState(images);
+
+	useEffect( () => {
+		tag === 'All' ? setFilteredImages(images) : setFilteredImages( images.filter(image=> image.catText === tag ))
+ 	}, [tag, images] );
 
 	const blockProps = useBlockProps({
 		className: classnames(className, `custom-class`),
@@ -52,21 +59,18 @@ export default function Edit(props) {
 			item.url = image.url;
 			sources.push(item);
 		});
-		console.log('Images---',images);
-		console.log('Sources---',sources);
 		setAttributes({ images, sources });
 	}
-
+	
 	let urls = [];
-	images.map((image) => urls.push(image.url));
-	let cats = [];
+	filteredImages.map((image) => urls.push(image.url));
+	let cats = ['All'];
 	images.map((item) => cats.push(item.catText));
 	cats = cats.filter((e, i, a) => a.indexOf(e) === i);
-	// images.map((item) => console.log(item));
-	console.log('cats---',cats);
-	console.log('images---',images);
-	console.log(filter);
-	console.log(cats.length);
+
+	console.log(filteredImages, tag);
+	console.log(urls, tag);
+	console.log(filteredImages, tag);
 
 	return (
 		<>
@@ -97,12 +101,12 @@ export default function Edit(props) {
 							{cats.length > 0 && filter &&
 								<div className={`categories`}>
 									{cats.map((cat) => (
-										<button>{cat}</button>
+										<TagButton name={cat} handleSetTag={setTag} />
 									))}
 								</div>
 							}
 							<div className={`img-block-wrapper`}>
-								{sources.map((source, index) => (
+								{filteredImages.map((source, index) => (
 									<a key={index} className={`gallery-img`}>
 										<span className="gallery-wrapper">
 											<img
@@ -124,8 +128,7 @@ export default function Edit(props) {
 										item.url = image.url;
 										sources.push(item);
 									});
-									console.log('Images select---', updatedImages);
-									console.log('Sources select---', sources);
+									
 									setAttributes({ images: updatedImages, sources });
 								}}
 								accept="image/*"
@@ -150,5 +153,12 @@ export default function Edit(props) {
 				</div>
 			</div>
 		</>
+	);
+}
+
+
+const TagButton = ( { name, handleSetTag } ) => {
+	return (
+		<button className={`tag`} onClick={ () => handleSetTag(name) }>{ name }</button>
 	);
 }
