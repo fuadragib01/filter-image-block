@@ -13,7 +13,7 @@ import {
 	TabPanel,
 	TextControl
 } from "@wordpress/components";
-import { useEffect } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
 import { select } from "@wordpress/data";
 
 /**
@@ -34,8 +34,10 @@ function Inspector(props) {
 		filter,
 		images,
 		categories,
-		catText
 	} = attributes;
+
+
+	const [catText, setCatText] = useState('');
 
 	const handleCatText = (catText, id) => {
 		const validUrl = catText.length > 0;
@@ -55,10 +57,29 @@ function Inspector(props) {
 		setAttributes({ images: updatedImageArray });
 		// setAttributes({ categories: updatedImageArray2 });
 	};
-	const handleCatText2 = () => {
-		alert("Working");
+
+	const catTextHandle = (text) => {
+
+		// setAttributes({catText: text?.target?.value});
+		// setAttributes({catText: text});
+		setCatText(text)
+	};
+	const handleCatSubmit = (e) => {
+		e.preventDefault();
+		setCatText( '')
+
+		const newArr = [
+			...categories,
+			catText
+		]
+
+		// alert(catText);
+		console.log(newArr);
+		setAttributes({categories:newArr})
+
 	}
 
+	
 	return (
 		<InspectorControls key="controls">
 			<div className="plugin-panel-control">
@@ -76,11 +97,24 @@ function Inspector(props) {
 				</PanelBody>
 				<PanelBody title={__("Categories", "image-filter")}>
 					<>
-						<form onSubmit={handleCatText2}>
-							<label for="catText">Categories</label><br />
-							<input type="text" value={catText} name="catText" forId="catText" onChange={()=> setAttributes({catText})} />
+						<form onSubmit={handleCatSubmit}>
+							{/* <label >Categories<br />
+							<input type="text" value={catText} name="catText" onChange={catTextHandle} />
+							</label> */}
+							<TextControl
+								label={__("Category", "essential-blocks")}
+								value={catText}
+								onChange={(catText) => setCatText(catText)}
+							/>
 							<input type="submit" name="catBtn" value="Add" />
 						</form>
+						{categories.length > 0 && 
+							<span className={`cats`}>
+								{categories.map((cat) => (
+									<span>{cat}</span>
+								))}
+							</span>
+						}
 					</>
 				</PanelBody>
 				<PanelBody title={__("Images", "essential-blocks")}>
