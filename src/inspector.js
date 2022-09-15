@@ -117,6 +117,7 @@ function Inspector(props) {
 						}
 					</>
 				</PanelBody>
+
 				<PanelBody title={__("Images", "essential-blocks")}>
 					{images.map((item, index) => {
 						console.log('item----', item.catText);
@@ -133,9 +134,13 @@ function Inspector(props) {
 								key={index}
 							>
 									<>
-										<TextControl
+										<SelectControl
 											label={__("Category", "essential-blocks")}
 											value={item.catText}
+											options={categories.map( (cat) => {
+												const newObj = {label: cat, value: cat};
+												return newObj;
+											})}
 											onChange={(text) =>
 												handleCatText(text, item.id)
 											}

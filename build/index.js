@@ -593,9 +593,16 @@ function Inspector(props) {
       }),
       className: "eb-slider-item-single-panel",
       key: index
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Category", "essential-blocks"),
       value: item.catText,
+      options: categories.map(cat => {
+        const newObj = {
+          label: cat,
+          value: cat
+        };
+        return newObj;
+      }),
       onChange: text => handleCatText(text, item.id)
     })));
   }))));
