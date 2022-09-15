@@ -33,4 +33,5 @@ registerBlockType(
 		save: Save,
 		example,
 		deprecated,
-	});
+	}
+);

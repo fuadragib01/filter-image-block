@@ -3,6 +3,32 @@ const attributes = {
 	blockId: {
 		type: "string",
 	},
+	media: {
+		type: 'object'
+	},
+	images: {
+		type: 'array',
+		default: []
+	},
+	sources: {
+		type: "array",
+		default: [],
+	},
+	newImage: {
+		type: "string",
+	},
+	filter: {
+		type: 'boolean',
+		default: false
+	},
+	categories: {
+		type: 'array',
+		default: []
+	},
+	catText: {
+		type: 'string',
+		default: ''
+	}
 };
 
 export default attributes;
