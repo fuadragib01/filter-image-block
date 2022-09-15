@@ -52,14 +52,10 @@ function Inspector(props) {
 			return item;
 		});
 		
-		// console.log(id, catText, updatedImageArray);
-		// console.log('categories---', id, catText, updatedImageArray2);
 		setAttributes({ images: updatedImageArray });
-		// setAttributes({ categories: updatedImageArray2 });
 	};
 
 	const catTextHandle = (text) => {
-
 		// setAttributes({catText: text?.target?.value});
 		// setAttributes({catText: text});
 		setCatText(text)
@@ -72,14 +68,10 @@ function Inspector(props) {
 			...categories,
 			catText
 		]
-
-		// alert(catText);
-		console.log(newArr);
 		setAttributes({categories:newArr})
 
 	}
 
-	
 	return (
 		<InspectorControls key="controls">
 			<div className="plugin-panel-control">
@@ -98,9 +90,6 @@ function Inspector(props) {
 				<PanelBody title={__("Categories", "image-filter")}>
 					<>
 						<form onSubmit={handleCatSubmit}>
-							{/* <label >Categories<br />
-							<input type="text" value={catText} name="catText" onChange={catTextHandle} />
-							</label> */}
 							<TextControl
 								label={__("Category", "essential-blocks")}
 								value={catText}
@@ -108,7 +97,7 @@ function Inspector(props) {
 							/>
 							<input type="submit" name="catBtn" value="Add" />
 						</form>
-						{categories.length > 0 && 
+						{categories.filter((e, i, a) => a.indexOf(e) === i).length > 0 && 
 							<span className={`cats`}>
 								{categories.map((cat) => (
 									<span>{cat}</span>
@@ -120,7 +109,6 @@ function Inspector(props) {
 
 				<PanelBody title={__("Images", "essential-blocks")}>
 					{images.map((item, index) => {
-						console.log('item----', item.catText);
 						return (
 							<PanelBody
 								title={
@@ -133,19 +121,19 @@ function Inspector(props) {
 								className="eb-slider-item-single-panel"
 								key={index}
 							>
-									<>
-										<SelectControl
-											label={__("Category", "essential-blocks")}
-											value={item.catText}
-											options={categories.map( (cat) => {
-												const newObj = {label: cat, value: cat};
-												return newObj;
-											})}
-											onChange={(text) =>
-												handleCatText(text, item.id)
-											}
-										/>
-									</>
+								<>
+									<SelectControl
+										label={__("Category", "essential-blocks")}
+										value={item.catText}
+										options={categories.filter((e, i, a) => a.indexOf(e) === i).map( (cat) => {
+											const newObj = {label: cat, value: cat};
+											return newObj;
+										})}
+										onChange={(text) =>
+											handleCatText(text, item.id)
+										}
+									/>
+								</>
 							</PanelBody>
 						);
 					})}

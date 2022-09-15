@@ -183,13 +183,7 @@ function Edit(props) {
     sources,
     newImage,
     filter
-  } = attributes; // 
-  // useEffect(() => {
-  // 	setAttributes({
-  // 		blockId: clientId,
-  // 	});
-  // }, []);
-
+  } = attributes;
   const [tag, setTag] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('All');
   const [filteredImages, setFilteredImages] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(images);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -200,15 +194,8 @@ function Edit(props) {
   });
 
   function onImageSelect(images) {
-    let sources = [];
-    images.map(image => {
-      let item = {};
-      item.url = image.url;
-      sources.push(item);
-    });
     setAttributes({
-      images,
-      sources
+      images
     });
   }
 
@@ -216,10 +203,9 @@ function Edit(props) {
   filteredImages.map(image => urls.push(image.url));
   let cats = ['All'];
   images.map(item => cats.push(item.catText));
+  console.log(cats);
   cats = cats.filter((e, i, a) => a.indexOf(e) === i);
-  console.log(filteredImages, tag);
-  console.log(urls, tag);
-  console.log(filteredImages, tag);
+  console.log(cats);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, isSelected && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_inspector__WEBPACK_IMPORTED_MODULE_6__["default"], {
     attributes: attributes,
     setAttributes: setAttributes
@@ -542,12 +528,10 @@ function Inspector(props) {
       }
 
       return item;
-    }); // console.log(id, catText, updatedImageArray);
-    // console.log('categories---', id, catText, updatedImageArray2);
-
+    });
     setAttributes({
       images: updatedImageArray
-    }); // setAttributes({ categories: updatedImageArray2 });
+    });
   };
 
   const catTextHandle = text => {
@@ -559,9 +543,7 @@ function Inspector(props) {
   const handleCatSubmit = e => {
     e.preventDefault();
     setCatText('');
-    const newArr = [...categories, catText]; // alert(catText);
-
-    console.log(newArr);
+    const newArr = [...categories, catText];
     setAttributes({
       categories: newArr
     });
@@ -592,12 +574,11 @@ function Inspector(props) {
     type: "submit",
     name: "catBtn",
     value: "Add"
-  })), categories.length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  })), categories.filter((e, i, a) => a.indexOf(e) === i).length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: `cats`
   }, categories.map(cat => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, cat))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Images", "essential-blocks")
   }, images.map((item, index) => {
-    console.log('item----', item.catText);
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
       title: "Image " + (index + 1),
       initialOpen: false,
@@ -609,7 +590,7 @@ function Inspector(props) {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Category", "essential-blocks"),
       value: item.catText,
-      options: categories.map(cat => {
+      options: categories.filter((e, i, a) => a.indexOf(e) === i).map(cat => {
         const newObj = {
           label: cat,
           value: cat

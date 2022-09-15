@@ -34,13 +34,6 @@ export default function Edit(props) {
 		filter,
 	} = attributes;
 
-	// 
-	// useEffect(() => {
-	// 	setAttributes({
-	// 		blockId: clientId,
-	// 	});
-	// }, []);
-
 	const [tag, setTag] = useState('All');
 	const [filteredImages, setFilteredImages] = useState(images);
 
@@ -53,24 +46,16 @@ export default function Edit(props) {
 	});
 
 	function onImageSelect(images) {
-		let sources = [];
-		images.map((image) => {
-			let item = {};
-			item.url = image.url;
-			sources.push(item);
-		});
-		setAttributes({ images, sources });
+		setAttributes({ images });
 	}
 	
 	let urls = [];
 	filteredImages.map((image) => urls.push(image.url));
 	let cats = ['All'];
 	images.map((item) => cats.push(item.catText));
+	console.log(cats);
 	cats = cats.filter((e, i, a) => a.indexOf(e) === i);
-
-	console.log(filteredImages, tag);
-	console.log(urls, tag);
-	console.log(filteredImages, tag);
+	console.log(cats);
 
 	return (
 		<>
