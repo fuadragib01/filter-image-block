@@ -17,21 +17,21 @@ import "./style.scss";
 import metadata from "../block.json";
 
 registerBlockType(
-	{
-		name: "plugin-slug/plugin-name",
-		...metadata
-	},
-	{
-		icon: Icon,
-		attributes: Attributes,
-		keywords: [
-			__("images", "essential-blocks"),
-			__("photos", "essential-blocks"),
-			__("eb image gallery", "essential-blocks"),
-		],
-		edit: Edit,
-		save: Save,
-		example,
-		deprecated,
-	}
+  {
+    name: "plugin-slug/plugin-name",
+    ...metadata,
+  },
+  {
+    icon: Icon,
+    attributes: Attributes,
+    keywords: [
+      __("images", "essential-blocks"),
+      __("photos", "essential-blocks"),
+      __("eb image gallery", "essential-blocks"),
+    ],
+    edit: Edit,
+    save: Save,
+    example,
+    deprecated,
+  }
 );

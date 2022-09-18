@@ -1,0 +1,1 @@
+!function(){"use strict";window.wp.element,window.addEventListener("DOMContentLoaded",(e=>{const n=document.getElementsByClassName("block-wrapper");console.log(n)}))}();

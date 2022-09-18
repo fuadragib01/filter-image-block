@@ -40,6 +40,7 @@ function plugin_init()
 		'wp-i18n',
 		'wp-element',
 		'wp-block-editor',
+		'wp-editor',
 	));
 
 	wp_register_script(
@@ -66,6 +67,7 @@ function plugin_init()
 			array(
 				'editor_script'	=> 'create-block-block-name-editor-script',
 				'editor_style' 	=> 'create-block-block-name-editor-style',
+				'style' 	=> 'create-block-block-name-editor-style',
 				'render_callback' => function ($attributes, $content) {
 					if (!is_admin()) {
 						wp_enqueue_style('create-block-block-name-editor-style');
