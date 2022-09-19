@@ -28,11 +28,23 @@ function plugin_init()
 	define('BLOCK_ADMIN_PATH', dirname(__FILE__));
 
 	$script_asset_path = BLOCK_ADMIN_PATH . "/build/index.asset.php";
-	if (!file_exists($script_asset_path)) {
+	$script_asset_path2 = BLOCK_ADMIN_PATH . "/build/frontend/index.asset.php";
+	if (!file_exists($script_asset_path) || !file_exists($script_asset_path2)) {
 		throw new Error(
 			'You need to run `npm start` or `npm run build` for the "block/testimonial" block first.'
 		);
 	}
+	$front_index_js = BLOCK_ADMIN_URL . 'build/frontend/index.js';
+	$script_asset_frontend = require($script_asset_path2);
+	$all_dependencies2 = array_merge($script_asset_frontend['dependencies'], array(
+		'wp-blocks',
+		'wp-i18n',
+		'wp-element',
+		'wp-block-editor',
+		'wp-editor',
+	));
+
+
 	$index_js     = BLOCK_ADMIN_URL . 'build/index.js';
 	$script_asset = require($script_asset_path);
 	$all_dependencies = array_merge($script_asset['dependencies'], array(
@@ -71,6 +83,7 @@ function plugin_init()
 				'render_callback' => function ($attributes, $content) {
 					if (!is_admin()) {
 						wp_enqueue_style('create-block-block-name-editor-style');
+						wp_enqueue_script('create-block-block-name-frontend-script',BLOCK_ADMIN_URL . 'build/frontend/index.js', $all_dependencies2, BLOCK_VERSION, true);
 					}
 					return $content;
 				}

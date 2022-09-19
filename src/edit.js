@@ -8,7 +8,6 @@ import {
     MediaPlaceholder,
 } from "@wordpress/block-editor";
 import { Button } from "@wordpress/components";
-import { useState, useEffect } from "@wordpress/element";
 
 /**
  * Internal depencencies
@@ -25,31 +24,54 @@ export default function Edit(props) {
         clientId,
         isSelected,
     } = props;
-    const { images, newImage, filter } = attributes;
+    const { images, newImage, filter, categories } = attributes;
 
-    const [tag, setTag] = useState("All");
-    const [filteredImages, setFilteredImages] = useState(images);
+    const handleBtnClick = (name) => {
+        let updatedImageArray = images.map((item) => {
+            if (name === "All") {
+                return {
+                    ...item,
+                    catClass: "show",
+                };
+            }
+            if (item.catText == name) {
+                return {
+                    ...item,
+                    catClass: "show",
+                };
+            } else {
+                return {
+                    ...item,
+                    catClass: "hide",
+                };
+            }
+        });
 
-    useEffect(() => {
-        tag === "All"
-            ? setFilteredImages(images)
-            : setFilteredImages(
-                  images.filter((image) => image.catText === tag)
-              );
-    }, [tag, images]);
+        setAttributes({ images: updatedImageArray });
+    };
 
     const blockProps = useBlockProps({
         className: classnames(className, `custom-class`),
     });
 
     function onImageSelect(images) {
-        setAttributes({ images });
+        let updatedImageArray = images.map((item) => {
+            return {
+                ...item,
+                catClass: "show",
+            };
+        });
+
+        setAttributes({ images: updatedImageArray });
     }
 
     let cats = ["All"];
-    images.map((item) => cats.push(item.catText));
+    images.map((item) => {
+        if (item.catText !== undefined) {
+            cats.push(item.catText);
+        }
+    });
     cats = cats.filter((e, i, a) => a.indexOf(e) === i);
-    console.log("Amar name fuad", { images, tag, filteredImages });
 
     return (
         <>
@@ -62,7 +84,6 @@ export default function Edit(props) {
 
             {images?.length === 0 && (
                 <>
-                    <h1>Hello From futenberg</h1>
                     <MediaPlaceholder
                         onSelect={(images) => onImageSelect(images)}
                         accept="image/*"
@@ -81,24 +102,26 @@ export default function Edit(props) {
                 <div className={`block-wrapper`}>
                     {images?.length > 0 && (
                         <Fragment>
-                            {cats.length > 0 && filter && (
+                            {cats.length > 1 && filter && (
                                 <div className={`categories`}>
                                     {cats.map((cat) => (
                                         <TagButton
                                             name={cat}
-                                            handleSetTag={setTag}
+                                            handleBtnClick={handleBtnClick}
                                         />
                                     ))}
                                 </div>
                             )}
                             <div className={`img-block-wrapper`}>
-                                <h2>hello</h2>
-                                {filteredImages.map((source, index) => (
-                                    <a key={index} className={`gallery-img`}>
+                                {images.map((image, index) => (
+                                    <a
+                                        key={index}
+                                        className={`gallery-img ${image?.catClass} ${image.catText}`}
+                                    >
                                         <span className="gallery-wrapper">
                                             <img
                                                 className="gallery-img"
-                                                src={source.url}
+                                                src={image.url}
                                                 image-index={index}
                                             />
                                         </span>
@@ -107,21 +130,14 @@ export default function Edit(props) {
                             </div>
                             <MediaUpload
                                 onSelect={(newImage) => {
+                                    newImage[0].catClass = "show";
                                     let updatedImages = [
                                         ...images,
                                         ...newImage,
                                     ];
-                                    let sources = [];
-
-                                    updatedImages.map((image) => {
-                                        let item = {};
-                                        item.url = image.url;
-                                        sources.push(item);
-                                    });
 
                                     setAttributes({
                                         images: updatedImages,
-                                        sources,
                                     });
                                 }}
                                 accept="image/*"
@@ -152,9 +168,9 @@ export default function Edit(props) {
     );
 }
 
-const TagButton = ({ name, handleSetTag }) => {
+const TagButton = ({ name, handleBtnClick }) => {
     return (
-        <button className={`tag`} onClick={() => handleSetTag(name)}>
+        <button className={`tag`} onClick={() => handleBtnClick(name)}>
             {name}
         </button>
     );

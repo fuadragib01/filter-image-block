@@ -7,33 +7,22 @@ import classnames from "classnames";
 
 const Save = (props) => {
     const { attributes } = props;
-    const { images, filter } = attributes;
+    const { images, filter, categories } = attributes;
 
-    // const [tag, setTag] = useState('All');
-    // const [filteredImages, setFilteredImages] = useState(images);
-
-    // useEffect( () => {
-    // 	tag === 'All' ? setFilteredImages(images) : setFilteredImages( images.filter(image=> image.catText === tag ))
-    // }, [tag, images] );
-
-    // const blockProps = useBlockProps({
-    // 	className: classnames(className, `custom-class`),
-    // });
-
-    let urls = [];
-    images.map((image) => urls.push(image.url));
     let cats = ["All"];
-    images.map((item) => cats.push(item.catText));
-    console.log(urls.length, "from frontend");
+    images.map((item) => {
+        if (item.catText !== undefined) {
+            cats.push(item.catText);
+        }
+    });
     cats = cats.filter((e, i, a) => a.indexOf(e) === i);
-    // console.log(cats);
 
     return (
         <div {...useBlockProps.save()}>
             <div className={`block-wrapper`}>
                 {images?.length > 0 && (
                     <>
-                        {cats.length > 0 && filter && (
+                        {cats.length > 1 && filter && (
                             <div className={`categories`}>
                                 {cats.map((cat) => (
                                     <TagButton name={cat} />
@@ -42,7 +31,10 @@ const Save = (props) => {
                         )}
                         <div className={`img-block-wrapper`}>
                             {images.map((image, index) => (
-                                <a key={index} className={`gallery-img`}>
+                                <a
+                                    key={index}
+                                    className={`gallery-img all ${image?.catText} ${image.catClass}`}
+                                >
                                     <span className="gallery-wrapper">
                                         <img
                                             className="gallery-img"
@@ -61,6 +53,6 @@ const Save = (props) => {
 };
 
 const TagButton = ({ name }) => {
-    return <button className={`tag`}>{name}</button>;
+    return <button className={name}>{name}</button>;
 };
 export default Save;

@@ -38,4 +38,12 @@
   cursor: pointer;
 }
 
+.img-block-wrapper .show {
+  display: block;
+}
+
+.img-block-wrapper .hide {
+  display: none;
+}
+
 /*# sourceMappingURL=style-index.css.map*/
